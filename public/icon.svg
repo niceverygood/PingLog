@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  <polyline points="40,320 100,280 160,300 220,200 280,240 340,160 400,180 460,120"
+    fill="none" stroke="#00ff41" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="460" cy="120" r="14" fill="#00ff41"/>
+  <rect x="40" y="360" width="14" height="60" fill="#00ff41" opacity="0.8"/>
+  <rect x="70" y="340" width="14" height="80" fill="#00ff41" opacity="0.8"/>
+  <rect x="100" y="350" width="14" height="70" fill="#00ff41" opacity="0.8"/>
+  <rect x="130" y="320" width="14" height="100" fill="#00ff41" opacity="0.8"/>
+  <rect x="160" y="355" width="14" height="65" fill="#00ff41" opacity="0.8"/>
+  <text x="40" y="460" font-family="monospace" font-size="52" font-weight="bold" fill="#00ff41" opacity="0.9">PingLog</text>
+</svg>
