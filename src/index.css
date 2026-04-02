@@ -4,11 +4,29 @@
   --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1a1a1a #0a0a0a;
+/* ── Global reset ───────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; padding: 0; }
+
+/* ── Safe area custom props ─────────────────────── */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 }
 
-body {
-  margin: 0;
+/* ── Scrollbars ─────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1e1e1e #0a0a0a;
 }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #1e1e1e; border-radius: 2px; }
+
+/* ── Prevent tap highlight on mobile ────────────── */
+button, a { -webkit-tap-highlight-color: transparent; }
+
+/* ── Prevent iOS bounce ─────────────────────────── */
+body { overscroll-behavior: none; }
