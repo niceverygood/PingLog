@@ -493,8 +493,8 @@ export default function PingLog() {
       <div className="h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#0f0f0f" }}>
         {/* Conversation header */}
         {activeRoute && (
-          <div className="flex-shrink-0 flex items-center gap-3 px-3 py-2.5 border-b border-[#1e1e1e] bg-[#111]"
-            style={{ minHeight: "60px" }}>
+          <div className="flex-shrink-0 flex items-center gap-3 px-3 border-b border-[#1e1e1e] bg-[#111]"
+            style={{ minHeight: "60px", paddingTop: "max(12px, var(--sat))", paddingBottom: "10px" }}>
             {/* Back (mobile) */}
             <button onClick={() => setActiveId(null)}
               className="md:hidden flex items-center justify-center w-8 h-8 -ml-1 text-[#aaa] active:text-white">
@@ -794,12 +794,12 @@ export default function PingLog() {
     </div>
   );
 
-  // Nav items
+  // Nav items — always visible
   const navItems = [
-    { id: "monitor" as Tab, icon: BarChart2, label: "Monitor", color: "#00ff41", always: true },
-    { id: "channel" as Tab, icon: Radio, label: "채팅", color: "#00e676", always: false },
-    { id: "config" as Tab, icon: Settings2, label: "Config", color: "#00d4ff", always: false },
-  ].filter(item => item.always || unlocked);
+    { id: "monitor" as Tab, icon: BarChart2, label: "Monitor", color: "#00ff41" },
+    { id: "channel" as Tab, icon: Radio, label: "채팅", color: "#00e676" },
+    { id: "config" as Tab, icon: Settings2, label: "Config", color: "#00d4ff" },
+  ];
 
   // 모바일에서 채팅방 열려있으면 bottom nav 숨김
   const hideBottomNav = tab === "channel" && !!activeId;
@@ -900,7 +900,7 @@ export default function PingLog() {
         {/* Body */}
         <div className="flex-1 overflow-hidden min-h-0">
           {tab === "monitor" && <MonitorPanel />}
-          {tab === "channel" && unlocked && (
+          {tab === "channel" && (
             <div className="h-full flex overflow-hidden">
               {/* List panel */}
               <div className={`${activeId ? "hidden md:flex" : "flex"} flex-col md:w-80 lg:w-96 md:border-r md:border-[#1e1e1e] w-full`}>
