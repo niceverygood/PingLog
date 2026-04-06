@@ -346,7 +346,8 @@ export default function PingLog() {
   // ── Lock screen ────────────────────────────────────────────────────
   if (locked) {
     return (
-      <div className="h-[100dvh] bg-[#0a0a0a] flex flex-col items-center justify-center font-mono text-[#555] px-8">
+      <div className="h-[100dvh] bg-[#0a0a0a] flex flex-col items-center justify-center font-mono text-[#555] px-8"
+        style={{ paddingTop: "var(--sat)", paddingBottom: "var(--sab)" }}>
         <RefreshCw className="w-10 h-10 animate-spin text-[#2a2a2a] mb-5" />
         <p className="text-sm mb-4 tracking-widest">RECONNECTING TO SERVER...</p>
         <div className="w-full max-w-xs h-1.5 bg-[#1a1a1a] rounded overflow-hidden">
@@ -660,39 +661,44 @@ export default function PingLog() {
   // ── Monitor Panel ──────────────────────────────────────────────────
   const MonitorPanel = () => (
     <div className="h-full flex flex-col overflow-hidden">
-      <div className="flex-shrink-0 grid grid-cols-2 gap-2 p-3 pb-2">
-        <div className="bg-[#111] border border-[#1a1a1a] rounded-xl p-3">
-          <p className="text-[9px] text-[#444] uppercase tracking-widest mb-1 font-mono">Latency</p>
-          <p className="text-[#00ff41] text-xl font-bold leading-none mb-2 font-mono">
-            {latestLat}<span className="text-xs font-normal text-[#555]">ms</span></p>
-          <Sparkline data={latData} color="#00ff41" h={28} />
+      <div className="flex-shrink-0 p-3 pb-2 space-y-2">
+        {/* Top row: Latency + Pkt Loss */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-[#111] border border-[#1a1a1a] rounded-2xl p-3">
+            <p className="text-[9px] text-[#444] uppercase tracking-widest mb-1 font-mono">Latency</p>
+            <p className="text-[#00ff41] text-2xl font-bold leading-none mb-2 font-mono">
+              {latestLat}<span className="text-xs font-normal text-[#555]">ms</span></p>
+            <Sparkline data={latData} color="#00ff41" h={32} />
+          </div>
+          <div className="bg-[#111] border border-[#1a1a1a] rounded-2xl p-3">
+            <p className="text-[9px] text-[#444] uppercase tracking-widest mb-1 font-mono">Pkt Loss</p>
+            <p className="text-[#ff5555] text-2xl font-bold leading-none mb-2 font-mono">
+              {latestLoss}<span className="text-xs font-normal text-[#555]">%</span></p>
+            <MiniBar values={lossData} color="#ff5555" />
+          </div>
         </div>
-        <div className="bg-[#111] border border-[#1a1a1a] rounded-xl p-3">
-          <p className="text-[9px] text-[#444] uppercase tracking-widest mb-1 font-mono">Pkt Loss</p>
-          <p className="text-[#ff5555] text-xl font-bold leading-none mb-2 font-mono">
-            {latestLoss}<span className="text-xs font-normal text-[#555]">%</span></p>
-          <MiniBar values={lossData} color="#ff5555" />
-        </div>
-        <div className="col-span-2 bg-[#111] border border-[#1a1a1a] rounded-xl p-3">
+        {/* Throughput full width */}
+        <div className="bg-[#111] border border-[#1a1a1a] rounded-2xl p-3">
           <div className="flex items-center justify-between mb-2">
             <p className="text-[9px] text-[#444] uppercase tracking-widest font-mono">Throughput</p>
-            <p className="text-[#00d4ff] text-xl font-bold leading-none font-mono">
+            <p className="text-[#00d4ff] text-2xl font-bold leading-none font-mono">
               {latestThr}<span className="text-xs font-normal text-[#555]"> Mbps</span></p>
           </div>
-          <Sparkline data={thrData} color="#00d4ff" h={28} />
+          <Sparkline data={thrData} color="#00d4ff" h={36} />
         </div>
       </div>
-      <div className="flex-1 mx-3 mb-3 bg-[#0d0d0d] border border-[#1a1a1a] rounded-xl flex flex-col overflow-hidden min-h-0">
-        <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1a1a] bg-[#111] flex-shrink-0">
+      {/* Terminal log */}
+      <div className="flex-1 mx-3 mb-3 bg-[#0d0d0d] border border-[#1a1a1a] rounded-2xl flex flex-col overflow-hidden min-h-0">
+        <div className="flex items-center justify-between px-3 py-2.5 border-b border-[#1a1a1a] bg-[#111] flex-shrink-0 rounded-t-2xl">
           <div className="flex items-center gap-1.5">
-            <Terminal className="w-3 h-3 text-[#00ff41]" />
+            <Terminal className="w-3.5 h-3.5 text-[#00ff41]" />
             <span className="text-[9px] text-[#555] uppercase tracking-widest font-mono">Ping Log — Live Feed</span>
           </div>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00ff41] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-[#00ff41] animate-pulse" />
         </div>
-        <div className="flex-1 overflow-y-auto p-3 space-y-0.5 min-h-0 font-mono" style={{ fontSize: "10px" }}>
+        <div className="flex-1 overflow-y-auto p-3 space-y-1 min-h-0 font-mono" style={{ fontSize: "11px", lineHeight: "1.6" }}>
           {logs.map((log, i) => (
-            <div key={i} className={`leading-relaxed break-all ${log.includes("[WARN]") ? "text-[#ffaa00]" : log.includes("[DEBUG]") ? "text-[#555]" : "text-[#00ff41]/70"}`}>
+            <div key={i} className={`break-all ${log.includes("[WARN]") ? "text-[#ffaa00]" : log.includes("[DEBUG]") ? "text-[#555]" : "text-[#00ff41]/70"}`}>
               {log}
             </div>
           ))}
@@ -792,8 +798,11 @@ export default function PingLog() {
   const navItems = [
     { id: "monitor" as Tab, icon: BarChart2, label: "Monitor", color: "#00ff41", always: true },
     { id: "channel" as Tab, icon: Radio, label: "채팅", color: "#00e676", always: false },
-    { id: "config" as Tab, icon: Settings2, label: "Config", color: "#555", always: false },
+    { id: "config" as Tab, icon: Settings2, label: "Config", color: "#00d4ff", always: false },
   ].filter(item => item.always || unlocked);
+
+  // 모바일에서 채팅방 열려있으면 bottom nav 숨김
+  const hideBottomNav = tab === "channel" && !!activeId;
 
   // ══════════════════════════════════════════════════════════════════
   // LAYOUT RENDER
@@ -837,53 +846,55 @@ export default function PingLog() {
       {/* ── Main content ──────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-        {/* Top header (monitor/config only — channel has its own header) */}
-        {tab !== "channel" && (
-          <header className="flex-shrink-0 border-b border-[#1a1a1a] bg-[#0d0d0d] flex items-center justify-between px-4 font-mono"
-            style={{ paddingTop: "max(10px, var(--sat))", paddingBottom: "10px" }}>
+        {/* ── Mobile top header (unified) ── */}
+        {/* Channel with conversation open: ConversationView handles its own header */}
+        {!(tab === "channel" && activeId) && (
+          <header className="md:hidden flex-shrink-0 bg-[#0d0d0d] border-b border-[#1a1a1a] flex items-center justify-between px-4"
+            style={{
+              paddingTop: "max(14px, var(--sat))",
+              paddingBottom: "12px",
+            }}>
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 md:hidden">
-                <Activity className="w-4 h-4 text-[#00ff41]" />
-                <span className="text-[#00ff41] font-bold tracking-wider text-sm">PingLog</span>
-              </div>
-              <div className="hidden md:block text-xs text-[#444] uppercase tracking-widest">
-                {tab === "monitor" ? "Network Monitor" : "Route Config"}
-              </div>
+              <Activity className="w-4 h-4 text-[#00ff41]" />
+              <span className="text-[#00ff41] font-bold tracking-wider text-sm font-mono">PingLog</span>
+              <span className="text-[#333] text-xs font-mono hidden xs:inline">
+                {tab === "monitor" ? "/ monitor" : tab === "config" ? "/ config" : "/ 채팅"}
+              </span>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-1 text-[10px] text-[#444]">
-                <Shield className="w-3 h-3 text-[#00ff41]" /><span>TLS</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 text-[9px] text-[#444] font-mono">
+                <Shield className="w-3 h-3 text-[#00ff41]" />
+                <span className="hidden sm:inline">TLS</span>
               </div>
-              <div className="hidden sm:flex items-center gap-1 text-[10px] text-[#444]">
-                <Wifi className="w-3 h-3 text-[#00d4ff]" /><span>ON</span>
+              <div className="flex items-center gap-1 text-[9px] text-[#444] font-mono">
+                <Wifi className="w-3 h-3 text-[#00d4ff]" />
+                <span className="hidden sm:inline">ON</span>
               </div>
-              <div className="flex items-center gap-1 text-[10px] text-[#444]">
-                <Server className="w-2.5 h-2.5" />
-                <span className="text-[#00d4ff] hidden sm:inline text-[10px]">{PROBE_ID}</span>
+              <div className="flex items-center gap-1 text-[9px] text-[#00d4ff] font-mono">
+                <Server className="w-3 h-3" />
+                <span className="hidden xs:inline">{PROBE_ID}</span>
               </div>
               <button onClick={handleLock}
-                className="md:hidden min-h-[36px] flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] bg-[#1a1a1a] text-[#555] border border-[#222]">
-                <Lock className="w-3.5 h-3.5" />
+                className="ml-1 w-9 h-9 flex items-center justify-center rounded-xl bg-[#151515] border border-[#222] text-[#555] active:bg-[#1e1e1e]">
+                <Lock className="w-4 h-4" />
               </button>
             </div>
           </header>
         )}
 
-        {/* Channel: mobile top bar (shown only when NOT in conversation on mobile) */}
-        {tab === "channel" && unlocked && !activeId && (
-          <div className="md:hidden flex-shrink-0 flex items-center justify-between px-4 border-b border-[#1e1e1e] bg-[#111]"
-            style={{ paddingTop: "max(10px, var(--sat))", paddingBottom: "10px" }}>
-            <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4 text-[#00ff41]" />
-              <span className="text-[#00ff41] font-bold tracking-wider text-sm">PingLog</span>
+        {/* ── Desktop top header ── */}
+        {tab !== "channel" && (
+          <header className="hidden md:flex flex-shrink-0 border-b border-[#1a1a1a] bg-[#0d0d0d] items-center justify-between px-4 py-2.5 font-mono"
+            style={{ paddingTop: "max(10px, var(--sat))" }}>
+            <span className="text-xs text-[#444] uppercase tracking-widest">
+              {tab === "monitor" ? "Network Monitor" : "Route Config"}
+            </span>
+            <div className="flex items-center gap-3 text-[10px] text-[#444]">
+              <span className="flex items-center gap-1"><Shield className="w-3 h-3 text-[#00ff41]" />TLS</span>
+              <span className="flex items-center gap-1"><Wifi className="w-3 h-3 text-[#00d4ff]" />ON</span>
+              <span className="flex items-center gap-1 text-[#00d4ff]"><Server className="w-2.5 h-2.5" />{PROBE_ID}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <button onClick={handleLock}
-                className="min-h-[36px] flex items-center px-2.5 py-1 rounded-lg text-[10px] bg-[#1a1a1a] text-[#555] border border-[#222]">
-                <Lock className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
+          </header>
         )}
 
         {/* Body */}
@@ -906,28 +917,36 @@ export default function PingLog() {
       </div>
 
       {/* ── Mobile bottom nav ─────────────────────────────────────── */}
-      <nav className="md:hidden flex-shrink-0 border-t border-[#1a1a1a] bg-[#0d0d0d] flex items-stretch"
-        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
-        {navItems.map(({ id, icon: Icon, label, color }) => (
-          <button key={id}
-            onClick={() => { setTab(id); if (id !== "channel") setActiveId(null); }}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors relative ${tab === id ? "" : "text-[#3a3a3a]"}`}
-            style={{ color: tab === id ? color : undefined, minHeight: "56px" }}>
-            <Icon className="w-5 h-5" />
-            <span className="text-[9px] uppercase tracking-widest font-mono">{label}</span>
-            {id === "channel" && totalUnread > 0 && tab !== "channel" && (
-              <span className="absolute top-2 right-[calc(50%-14px)] min-w-[16px] h-4 rounded-full bg-[#00e676] text-[#0a0a0a] text-[8px] font-bold flex items-center justify-center px-1">
-                {totalUnread}
-              </span>
-            )}
+      {!hideBottomNav && (
+        <nav className="md:hidden flex-shrink-0 border-t border-[#1a1a1a] bg-[#0d0d0d] flex items-stretch"
+          style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+          {navItems.map(({ id, icon: Icon, label, color }) => (
+            <button key={id}
+              onClick={() => { setTab(id); if (id !== "channel") setActiveId(null); }}
+              className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors relative`}
+              style={{ color: tab === id ? color : "#3a3a3a", minHeight: "60px" }}>
+              {/* Active indicator bar */}
+              {tab === id && (
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full"
+                  style={{ backgroundColor: color }} />
+              )}
+              <Icon className="w-5 h-5" />
+              <span className="text-[9px] uppercase tracking-widest font-mono">{label}</span>
+              {id === "channel" && totalUnread > 0 && tab !== "channel" && (
+                <span className="absolute top-2 right-[calc(50%-18px)] min-w-[16px] h-4 rounded-full bg-[#00e676] text-[#0a0a0a] text-[8px] font-bold flex items-center justify-center px-1">
+                  {totalUnread}
+                </span>
+              )}
+            </button>
+          ))}
+          {/* Version / secret unlock */}
+          <button onClick={handleVersion}
+            className="px-4 flex flex-col items-center justify-center gap-0.5 py-3"
+            style={{ minHeight: "60px", color: clicks > 0 ? "#555" : "#222" }}>
+            <span className="text-[9px] tracking-widest font-mono">{clicks > 0 ? "·".repeat(clicks) : "v2.4.1"}</span>
           </button>
-        ))}
-        <button onClick={handleVersion}
-          className="px-4 flex flex-col items-center justify-center gap-0.5 py-3 text-[#222] font-mono"
-          style={{ minHeight: "56px" }}>
-          <span className="text-[9px] tracking-widest">{clicks > 0 ? "·".repeat(clicks) : "v2.4.1"}</span>
-        </button>
-      </nav>
+        </nav>
+      )}
     </div>
   );
 }
