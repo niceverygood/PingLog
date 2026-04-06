@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
-  Activity, Shield, Lock, Terminal, Server, Zap, Wifi,
+  Activity, Shield, Lock, Terminal, Server, Wifi,
   RefreshCw, Radio, BarChart2, Send, Settings2, Copy, Share2,
-  Check, Plus, Trash2, ChevronLeft, Circle, Smile, Paperclip,
+  Check, Plus, Trash2, Circle, Smile, Paperclip,
   MoreVertical, Phone, Video, Search, ArrowLeft,
 } from "lucide-react";
 
@@ -218,8 +218,6 @@ export default function PingLog() {
   const [latData, setLatData] = useState(() => Array.from({ length: 24 }, () => 10 + Math.random() * 50));
   const [lossData, setLossData] = useState(() => Array.from({ length: 16 }, () => Math.random() * 4));
   const [thrData, setThrData] = useState(() => Array.from({ length: 24 }, () => 50 + Math.random() * 150));
-  const [uptime] = useState(() => Math.floor(100 + Math.random() * 9000));
-
   // Secret
   const [unlocked, setUnlocked] = useState(false);
   const [clicks, setClicks] = useState(0);
@@ -558,7 +556,6 @@ export default function PingLog() {
               {/* Messages in group */}
               {msgs.map((msg, idx) => {
                 const isSend = msg.dir === "send";
-                const isLast = idx === msgs.length - 1;
                 const nextSameDir = idx < msgs.length - 1 && msgs[idx + 1].dir === msg.dir;
                 return (
                   <div key={msg.id}
